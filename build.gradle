@@ -8,9 +8,15 @@ repositories{
     mavenLocal()
 }
 
+task run(type: JavaExec, dependsOn: classes) {
+    main = 'org.apache.bigtop.devtools.JIRAExample'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}
+
 dependencies{
     compile 'org.slf4j:slf4j-api:1.7.5'
-	compile 'org.scala-lang:scala-library:2.10.0'
+    compile 'org.scala-lang:scala-library:2.10.0'
     testCompile "junit:junit:4.11"
     compile 'net.rcarz:jira-client:0.4'
 }
