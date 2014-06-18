@@ -15,12 +15,13 @@ class GitRepo(project: String ) {
     def run(s : String) : Int = {
         	val sh = new Shell();
 	    	sh.exec(s);
-	    	System.out.println("\t " + s + " ::: " + sh.getOut()+" " + sh.getErr())
+	    	System.out.println(sh.getRet()+"\t " + s + " ::: " + sh.getOut()+" " + sh.getErr())
 	    	sh.getRet();
     }
     var ret=0;
     cmds.foreach(
         (c:String) => ret = ret + run(c))
+    System.out.println("FINAL RETURL VAL : " + ret);
     ret;
   }
   
@@ -58,8 +59,8 @@ class GitRepo(project: String ) {
     System.out.println(s"Testing patch now $location");
 
     val patchCmd =        
-      (if (str.contains("diff --git")) 
-        	"git am" 
+      (if (str.contains("diff --git a/") )
+        	"patch -p1 <" 
           else 
             "patch -p0 <")
     System.out.println("path ==== "+str+"======")

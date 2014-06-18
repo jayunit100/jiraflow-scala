@@ -80,8 +80,17 @@ object ApacheJIRATester {
   def run(project : String, username : String, password : String) : Unit = {
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     val time = cal.getTime();
-    val issues:SearchResult = scan(project, username, password)
-   // val review:PatchReview = evaluate(issues)
+    while(1==1){
+    	val issues:SearchResult = scan(project, username, password)
+        /**
+         * Pseudo code to write tomorrow.
+    	if(patch to review){
+    		val review:PatchReview = evaluate(issues)
+    		post comment
+    	}
+         */
+    	Thread.sleep(10000);
+    }
     
   }
 }

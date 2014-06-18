@@ -25,7 +25,8 @@ index 0000000..0966f8d
 @@ -0,0 +1 @@
 +TEST PATCH
 -- 
-1.8.5.2 (Apple Git-48)"""
+1.8.5.2 (Apple Git-48) 
+"""
   
   @Test def testGitRepo() { 
     val repo = new GitRepo("bigtop")

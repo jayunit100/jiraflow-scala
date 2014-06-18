@@ -7,17 +7,34 @@ repositories{
     mavenCentral()
     mavenLocal()
 }
-
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['src/test/scala']
+        }
+    }
+}
 task run(type: JavaExec, dependsOn: classes) {
     main = 'org.apache.bigtop.devtools.JIRAExample'
+
     classpath sourceSets.main.runtimeClasspath
+    classpath sourceSets.test.runtimeClasspath
     classpath configurations.runtime
 }
 
 dependencies{
     compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'net.databinder.dispatch:dispatch-core_2.10:0.11.1'
     compile 'org.scala-lang:scala-library:2.10.0'
-    testCompile "junit:junit:4.11"
+    compile 'org.scalatest:scalatest_2.10:2.2.0'
+
+    testCompile "junit:junit:4.4"
+	testCompile "org.apache.bigtop.itest:itest-common:0.7.0"
     compile 'net.rcarz:jira-client:0.4'
 }
 
