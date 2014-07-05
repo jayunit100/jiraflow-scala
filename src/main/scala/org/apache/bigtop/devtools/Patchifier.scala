@@ -1,6 +1,6 @@
 package org.apache.bigtop.devtools
 
-
+import scala.collection.JavaConversions._
 import scala.sys.process._
 import java.util.Calendar
 import java.util.TimeZone
@@ -10,6 +10,9 @@ import net.rcarz.jiraclient.Issue.SearchResult
 import java.nio.file.Path
 import java.nio.file.Files
 import java.nio.file.FileSystems
+import net.rcarz.jiraclient.Issue
+import net.rcarz.jiraclient.Attachment
+import java.lang.Thread
 
 /**
  * This is a JIRA Test application.
@@ -17,7 +20,7 @@ import java.nio.file.FileSystems
  * Outputs: A +1/-1.
  * Side effects: Auto review
  */
-object ApacheJIRATester {
+object Patchifier {
   
   object PatchReview extends Enumeration {
 	  val Plus1, Minus1 = Value
@@ -61,36 +64,21 @@ object ApacheJIRATester {
         map.get("username").toString(),
         map.get("password").toString())
   }
-  
-  def scan(project:String, username:String, password:String ) : SearchResult = {
-    val creds = new BasicCredentials(username,password);
-    val client = new JiraClient("https://issues.apache.org/jira", creds);
-    val issueResult =
-      client.
-        searchIssues(s"project=$project AND status=OPEN AND updated > -1m AND attachments IS NOT EMPTY");
-    
-    return issueResult;
-  }
- 
-  def evaluate(issues : SearchResult) : Any = {
-    
-    
-  }
-  
+   
   def run(project : String, username : String, password : String) : Unit = {
-    val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-    val time = cal.getTime();
+    var lastQueryTime=Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();    	
     while(1==1){
-    	val issues:SearchResult = scan(project, username, password)
-        /**
-         * Pseudo code to write tomorrow.
-    	if(patch to review){
-    		val review:PatchReview = evaluate(issues)
-    		post comment
-    	}
-         */
-    	Thread.sleep(10000);
-    }
-    
-  }
+    	new JiraScanner().scan(project, username, password, 1, 
+    	    {
+    			searchResult:SearchResult => 
+		    	val issuesToProcess=searchResult.issues.withFilter(
+		            (i:Issue)=>
+		              if(i.getAttachments().size()>0) true else false)
+		        val attachments = issuesToProcess.foreach(
+		            (i:Issue)=>
+		            	i.getAttachments().foreach(
+		            		(a:Attachment)=>{}))
+    	    })
+      Thread.sleep(1000);
+   }}
 }
