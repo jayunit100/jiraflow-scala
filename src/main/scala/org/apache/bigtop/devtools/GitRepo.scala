@@ -20,7 +20,10 @@ class GitRepo(project: String ) {
     }
     var ret=0;
     cmds.foreach(
-        (c:String) => ret = ret + run(c))
+    	(c:String) => {
+    	  ret = ret + run(c)
+    	}
+    )
     System.out.println("FINAL RETURL VAL : " + ret);
     ret;
   }
@@ -73,7 +76,4 @@ class GitRepo(project: String ) {
           
     return result;
   }
-  
-  
-  
 }
